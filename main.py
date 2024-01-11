@@ -6,7 +6,11 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 import time
 import random
 from selenium.common.exceptions import NoSuchElementException
+import pandas as pd
+import numpy as np
 import re
+from statistics import mean
+import matplotlib.pyplot as plt
 
 url = 'https://sepolia.etherscan.io/exportData?type=address&a='
 download_directory = (r'C:\Users\User\Documents\עבודה רננה\Blockchain\ניתוח נתונים מכירה פומבית\data')
@@ -22,6 +26,7 @@ chrome_options.add_experimental_option('prefs', {
     'download.directory_upgrade': True,
     # 'safebrowsing.enabled': True
 })
+
 
 # browser = webdriver.Chrome(options=chrome_options)
 
@@ -78,16 +83,59 @@ def login(address):
     #     print("end of while loop")
     #     # browser.quit()
 
-address_list = ['0xDFc97DF05F35315D6B84A49BB7FEF5d52c3c4850', '0xB3D54069f271919088158F9DE5E5f610C0D23C8B']
+
+def load_df():
+    sellers_data_1 = pd.read_csv('Data+Marketplace+stage+1+2+sellers.csv')
+    column_list = sellers_data_1.columns.values
+    # print(column_list)
+    sellers_data_1 = sellers_data_1.drop(
+        columns=["StartDate", "EndDate", 'Status', 'IPAddress', 'Progress', 'Duration (in seconds)', 'RecordedDate',
+                 'ResponseId', 'RecipientLastName', 'RecipientFirstName', 'RecipientEmail', 'ExternalReference',
+                 'LocationLatitude', 'LocationLongitude', 'DistributionChannel', 'UserLanguage', 'Introduction', 'i',
+                 'metamask feedback', 'mining feedback', 'wallet screenshot_Id', 'wallet screenshot_Name',
+                 'wallet screenshot_Size', 'wallet screenshot_Type', 'conf. creating auct', 'conf. auction page',
+                 'thank you'])
+    return sellers_data_1
+
+
+def create_address_list(col_lst, a, df_combined):
+    address_lst = []
+    clean_address_list = []
+    for i in range(a):
+        for index in df_combined.index:
+            if pd.isna(df_combined[col_lst[0] + str(i + 1) + "_1"][index]):
+                continue
+            elif not df_combined[col_lst[0] + str(i + 1) + "_1"][index].startswith('0x'):
+                continue
+            else:
+                if df_combined[col_lst[0] + str(i + 1) + "_1"][index] not in address_lst:
+                    clean_address = re.findall(r"0x\w+", df_combined[col_lst[0] + str(i + 1) + "_1"][index])
+                    clean_address_list.extend(clean_address)
+                    address_lst.append(df_combined[col_lst[0] + str(i + 1) + "_1"][index])
+    return clean_address_list
+
+
+def create_addresses_list():
+    df = load_df()
+    return create_address_list(['verification_'], 3, df)
+
+
+# address_list = ['0xDFc97DF05F35315D6B84A49BB7FEF5d52c3c4850', '0xB3D54069f271919088158F9DE5E5f610C0D23C8B']
+address_list = create_addresses_list()
 
 if __name__ == '__main__':
-    for address in address_list:
+    for address in address_list[21:]:
         print("starting with " + address)
         browser = webdriver.Chrome(options=chrome_options)
         try:
+            login(address)
+        except:
+            print("exception!")
+            browser.quit()
+            browser = webdriver.Chrome(options=chrome_options)
+            print("continue with " + address)
             login(address)
         finally:
             print("finished with " + address)
             browser.quit()
             time.sleep(2)
-
