@@ -6,10 +6,13 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 import time
 import random
 from selenium.common.exceptions import NoSuchElementException
+import re
 
 url = 'https://sepolia.etherscan.io/exportData?type=address&a='
-download_directory = (r'C:\Users\liast\Documents\RA Internship\Blockchain\data marketplace analysis\transactions by '
-                      r'auction address')
+download_directory = (r'C:\Users\User\Documents\עבודה רננה\Blockchain\ניתוח נתונים מכירה פומבית\data')
+
+# download_directory = (r'C:\Users\liast\Documents\RA Internship\Blockchain\data marketplace analysis\transactions by '
+#                       r'auction address')
 
 # Set up Chrome options and preferences for download
 chrome_options = Options()
@@ -47,6 +50,11 @@ def login(address):
 
     # Ticks reCAPTCHA checkbox
     if not check_exists_by_xpath('/html/body/div[2]/div[3]/div[1]/div/div/span/div[4]'):
+        element = browser.find_element(By.TAG_NAME, 'iframe')
+        print("scrolling down")
+        browser.execute_script("arguments[0].scrollIntoView();", element)
+        time.sleep(1)
+        print("scrollllllllll")
         browser.find_element(By.TAG_NAME, 'iframe').click()
     time.sleep(15)
 
@@ -54,11 +62,21 @@ def login(address):
     browser.find_element(By.ID, 'ContentPlaceHolder1_btnSubmit').click()
 
     # Wait for the file to be downloaded
-    while not any(fname.startswith(address) for fname in os.listdir(download_directory)):
+    while_num = 0
+    while not any(re.findall(rf"{address}", fname) for fname in os.listdir(download_directory)):
         time.sleep(1)
-
+        while_num += 1
+        print("while num is: ", while_num)
+    print("end of while loop")
     # browser.quit()
-
+    # r"0x\w+"
+    # while_num = 0
+    #     while not any(fname.startswith(address) for fname in os.listdir(download_directory)):
+    #         time.sleep(1)
+    #         while_num += 1
+    #         print("while num is: ", while_num)
+    #     print("end of while loop")
+    #     # browser.quit()
 
 address_list = ['0xDFc97DF05F35315D6B84A49BB7FEF5d52c3c4850', '0xB3D54069f271919088158F9DE5E5f610C0D23C8B']
 
