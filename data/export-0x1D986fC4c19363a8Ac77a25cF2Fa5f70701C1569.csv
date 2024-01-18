@@ -1,2 +1,2 @@
-"Txhash","Blockno","UnixTimestamp","DateTime (UTC)","From","To","ContractAddress","Value_IN(ETH)","Value_OUT(ETH)","CurrentValue @ $0/Eth","TxnFee(ETH)","TxnFee(USD)","Historical $Price/Eth","Status","ErrCode","Method"
-"0xec60cb24c6a061b741a35aa69c2f2ce582acf65193dae78afc08a519be821c9d","4922453","1703061720","2023-12-20 08:42:00","0x74314bbd12d7bac61518b741b4547ea06ac08d06","0x1d986fc4c19363a8ac77a25cf2fa5f70701c1569","","0.00000000000000051","0","0","0.021274273230302037","0","","","","Contribute"
+Txhash,Blockno,UnixTimestamp,DateTime (UTC),From,To,ContractAddress,Value_IN(ETH),Value_OUT(ETH),CurrentValue @ $0/Eth,TxnFee(ETH),TxnFee(USD),Historical $Price/Eth,Status,ErrCode,Method,val_in_wei
+0xec60cb24c6a061b741a35aa69c2f2ce582acf65193dae78afc08a519be821c9d,4922453,1703061720,20-12-23 8:42,0x74314bbd12d7bac61518b741b4547ea06ac08d06,0x1d986fc4c19363a8ac77a25cf2fa5f70701c1569,,5.1E-16,0,0,0.021274273,0,,,,Contribute,510

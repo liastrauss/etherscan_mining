@@ -1,13 +1,15 @@
+import numpy as np
 import pandas as pd
 import os
 from eth_utils import to_wei
+import matplotlib.pyplot as plt
 
 file_list = os.listdir("data")
 
 
 def eth_to_wei(eth_val):
     wei_val = to_wei(eth_val, 'ether')
-    print(f"ETH: {eth_val}, Wei: {wei_val}")
+    # print(f"ETH: {eth_val}, Wei: {wei_val}")
     return wei_val
 
 
@@ -19,10 +21,70 @@ def create_df_and_csv_with_wei_val():
             eth_val = row['Value_IN(ETH)']
             wei_val = eth_to_wei(eth_val)
             df.at[index, 'Value_IN(Wei)'] = wei_val
-        df.to_csv("data in wei/"+file+".csv")
+        df.to_csv("data in wei/" + file + ".csv")
         print(df['Value_IN(ETH)'])
 
 
-def create_plot():
+def create_dict_for_plot():
+    folder_path = 'data in wei'
+    data_dict = {}
 
-    return 0
+    for filename in os.listdir(folder_path):
+        if filename.endswith('.csv'):
+            file_path = os.path.join(folder_path, filename)
+            df = pd.read_csv(file_path)
+
+            if 'Value_IN(Wei)' in df.columns:
+                to_column = df['To']
+                value_column = df['Value_IN(Wei)']
+
+                for to, value in zip(to_column, value_column):
+                    if pd.notna(to):
+                        to = str(to)
+                        if pd.notna(value):
+                            if to not in data_dict:
+                                data_dict[to] = [value]
+                            else:
+                                data_dict[to].append(value)
+    return data_dict
+
+
+def create_stacked_bar_plot(data_dict):
+    # Extract keys and values from the dictionary
+    keys = list(data_dict.keys())
+    values = list(data_dict.values())
+
+    # Set up the figure and axes
+    fig, ax = plt.subplots()
+
+    # Create a color map
+    cmap = plt.get_cmap('tab10')
+
+    # Plot each column as a stacked bar
+    for i, (key, lst) in enumerate(zip(keys, values)):
+        if key != '0x7664e53c74b3beced08710d2617761d6a09ea4af':
+            bottom = 0
+            for value in lst:
+                if value != 0:  # Skip zero values
+                    height = value
+                    color = cmap((bottom + height / 2) / sum(lst))  # Center the color on the bar
+                    ax.bar(key, height, bottom=bottom, color=color)
+                    bottom += height
+
+    # Set the y-axis limit based on the maximum value
+    ax.set_ylim(0, 1000)
+
+    # Customize the plot
+    ax.set_xlabel('Keys')
+    ax.set_ylabel('Values')
+    ax.set_title('Stacked Bar Plot')
+    plt.xticks(rotation='vertical')
+
+    # Display the plot
+    plt.show()
+
+data_dict = create_dict_for_plot()
+
+# print(data_dict)
+
+create_stacked_bar_plot(data_dict)
