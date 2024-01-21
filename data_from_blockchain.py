@@ -49,20 +49,31 @@ def create_dict_for_plot():
     return data_dict
 
 
+def adapt_dict(data_dict):
+    new_dict = data_dict.copy()
+    for key, val in new_dict.items():
+        if len(val) > 1:
+            for i in range(len(val)-1, 0, -1):
+                val[i] = val[i] - val[i-1]
+    return new_dict
+
+
 def create_stacked_bar_plot(data_dict):
+    new_dict = adapt_dict(data_dict)
     # Extract keys and values from the dictionary
-    keys = list(data_dict.keys())
-    values = list(data_dict.values())
+    keys = list(new_dict.keys())
+    values = list(new_dict.values())
 
     # Set up the figure and axes
     fig, ax = plt.subplots()
 
     # Create a color map
-    cmap = plt.get_cmap('tab10')
+    cmap = plt.get_cmap('Set1')
 
     # Plot each column as a stacked bar
     for i, (key, lst) in enumerate(zip(keys, values)):
-        if key != '0x7664e53c74b3beced08710d2617761d6a09ea4af':
+        # if key != '0x7664e53c74b3beced08710d2617761d6a09ea4af':
+        if True:
             bottom = 0
             for value in lst:
                 if value != 0:  # Skip zero values
@@ -75,15 +86,17 @@ def create_stacked_bar_plot(data_dict):
     ax.set_ylim(0, 1000)
 
     # Customize the plot
-    ax.set_xlabel('Keys')
-    ax.set_ylabel('Values')
-    ax.set_title('Stacked Bar Plot')
+    ax.set_xlabel('Address')
+    ax.set_ylabel('Bids')
+    ax.set_title('Bids Stacked Bar Plot')
     plt.xticks(rotation='vertical')
 
     # Display the plot
     plt.show()
 
 data_dict = create_dict_for_plot()
+
+# print(adapt_dict(data_dict))
 
 # print(data_dict)
 

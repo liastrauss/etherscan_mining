@@ -61,7 +61,7 @@ def login(address):
         time.sleep(1)
         print("scrollllllllll")
         browser.find_element(By.TAG_NAME, 'iframe').click()
-    time.sleep(15)
+    time.sleep(30)
 
     # clicks on download
     browser.find_element(By.ID, 'ContentPlaceHolder1_btnSubmit').click()
