@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 
 url = 'https://sepolia.etherscan.io/exportData?type=address&a='
 download_directory = (r'C:\Users\User\Documents\עבודה רננה\Blockchain\ניתוח נתונים מכירה פומבית\data')
+file_list = os.listdir("data")
 
 # download_directory = (r'C:\Users\liast\Documents\RA Internship\Blockchain\data marketplace analysis\transactions by '
 #                       r'auction address')
@@ -84,17 +85,12 @@ def login(address):
     #     # browser.quit()
 
 
-def load_df():
-    sellers_data_1 = pd.read_csv('Data+Marketplace+stage+1+2+sellers.csv')
+def load_df(file_path, col):
+    sellers_data_1 = pd.read_csv(file_path)
     column_list = sellers_data_1.columns.values
     # print(column_list)
     sellers_data_1 = sellers_data_1.drop(
-        columns=["StartDate", "EndDate", 'Status', 'IPAddress', 'Progress', 'Duration (in seconds)', 'RecordedDate',
-                 'ResponseId', 'RecipientLastName', 'RecipientFirstName', 'RecipientEmail', 'ExternalReference',
-                 'LocationLatitude', 'LocationLongitude', 'DistributionChannel', 'UserLanguage', 'Introduction', 'i',
-                 'metamask feedback', 'mining feedback', 'wallet screenshot_Id', 'wallet screenshot_Name',
-                 'wallet screenshot_Size', 'wallet screenshot_Type', 'conf. creating auct', 'conf. auction page',
-                 'thank you'])
+        columns=col)
     return sellers_data_1
 
 
@@ -116,26 +112,58 @@ def create_address_list(col_lst, a, df_combined):
 
 
 def create_addresses_list():
-    df = load_df()
-    return create_address_list(['verification_'], 3, df)
+    df1 = load_df('Data+Marketplace+stage+1+2+sellers.csv',
+                  ["StartDate", "EndDate", 'Status', 'IPAddress', 'Progress', 'Duration (in seconds)', 'RecordedDate',
+                   'ResponseId', 'RecipientLastName', 'RecipientFirstName', 'RecipientEmail', 'ExternalReference',
+                   'LocationLatitude', 'LocationLongitude', 'DistributionChannel', 'UserLanguage', 'Introduction', 'i',
+                   'metamask feedback', 'mining feedback', 'wallet screenshot_Id', 'wallet screenshot_Name',
+                   'wallet screenshot_Size', 'wallet screenshot_Type', 'conf. creating auct', 'conf. auction page',
+                   'thank you'])
+    df2 = load_df('Data+marketplace+seller+stage+3.csv',
+                  ["StartDate", "EndDate", 'Status', 'IPAddress', 'Progress', 'Duration (in seconds)', 'RecordedDate',
+                   'ResponseId', 'RecipientLastName', 'RecipientFirstName', 'RecipientEmail', 'ExternalReference',
+                   'LocationLatitude', 'LocationLongitude', 'DistributionChannel', 'UserLanguage', 'introduction',
+                   'prolific id'])
+
+    part1_address_lst = create_address_list(['verification_'], 3, df1)
+    part3_address_lst = create_address_list(['bids information_'], 3, df2)
+    # print(set(part1_address_lst.extend(part3_address_lst)))
+    # print(len(set(part1_address_lst.extend(part3_address_lst))))
+    for add in part3_address_lst:
+        if add in part1_address_lst:
+            continue
+        else:
+            part1_address_lst.append(add)
+            print(add)
+    print(part1_address_lst)
+    print(len(part1_address_lst))
+    return part1_address_lst
 
 
 # address_list = ['0xDFc97DF05F35315D6B84A49BB7FEF5d52c3c4850', '0xB3D54069f271919088158F9DE5E5f610C0D23C8B']
-address_list = create_addresses_list()
+
 
 if __name__ == '__main__':
-    for address in address_list[21:]:
-        print("starting with " + address)
-        browser = webdriver.Chrome(options=chrome_options)
-        try:
-            login(address)
-        except:
-            print("exception!")
-            browser.quit()
+    address_list = create_addresses_list()
+    for address in address_list:
+        # if "export-" + address + ".csv.csv" not in download_directory:
+        if "export-" + address + ".csv" not in file_list:
+            print("starting with " + address)
             browser = webdriver.Chrome(options=chrome_options)
-            print("continue with " + address)
-            login(address)
-        finally:
-            print("finished with " + address)
-            browser.quit()
-            time.sleep(2)
+            try:
+                login(address)
+            except:
+                print("exception!")
+                browser.quit()
+                browser = webdriver.Chrome(options=chrome_options)
+                print("continue with " + address)
+                login(address)
+            finally:
+                print("finished with " + address)
+                browser.quit()
+                time.sleep(2)
+
+
+# 0x93eeE25C77671084B234046e77e7207da8dF3bc4
+# 0xB3D54069f271919088158F9DE5E5f610C0D23C8B
+# 0x3053531A176F4eFEF1ef78126Da54EbAf978A9De
