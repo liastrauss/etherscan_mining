@@ -18,11 +18,12 @@ def create_df_and_csv_with_wei_val():
     for file in file_list:
         df = pd.read_csv("data/" + file, float_precision='round_trip')
         for index, row in df.iterrows():
-            eth_val = row['Value_IN(ETH)']
-            wei_val = eth_to_wei(eth_val)
-            df.at[index, 'Value_IN(Wei)'] = wei_val
+            if pd.isna(row['Status']):
+                eth_val = row['Value_IN(ETH)']
+                wei_val = eth_to_wei(eth_val)
+                df.at[index, 'Value_IN(Wei)'] = wei_val
         df.to_csv("data in wei/" + file + ".csv")
-        print(df['Value_IN(ETH)'])
+        # print(df['Value_IN(ETH)'])
 
 
 def create_dict_for_plot():
@@ -94,10 +95,10 @@ def create_stacked_bar_plot(data_dict):
     # Display the plot
     plt.show()
 
-data_dict = create_dict_for_plot()
+# data_dict = create_dict_for_plot()
 
 # print(adapt_dict(data_dict))
 
 # print(data_dict)
 
-create_stacked_bar_plot(data_dict)
+# create_stacked_bar_plot(data_dict)
