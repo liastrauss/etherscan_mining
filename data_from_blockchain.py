@@ -97,7 +97,6 @@ def create_stacked_bar_plot(data_dict):
 
 # data_dict = create_dict_for_plot()
 
-# print(adapt_dict(data_dict))
 
 # print(data_dict)
 
