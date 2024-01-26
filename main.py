@@ -15,9 +15,9 @@ import matplotlib.pyplot as plt
 url = 'https://sepolia.etherscan.io/exportData?type=address&a='
 
 # if you download the file to a different directory, change the path here:
-download_directory = (r'C:\Users\User\Documents\עבודה רננה\Blockchain\ניתוח נתונים מכירה פומבית\data')
+download_directory = (r'C:\Users\liast\PycharmProjects\pythonProject1\data 2201')
 
-# download_directory = (r'C:\Users\liast\Documents\RA Internship\Blockchain\data 2101 marketplace analysis\transactions by '
+# download_directory = (r'C:\Users\liast\Documents\RA Internship\Blockchain\data qualtrics marketplace analysis\transactions by '
 #                       r'auction address')
 
 # Set up Chrome options and preferences for download
@@ -35,7 +35,7 @@ chrome_options.add_experimental_option('prefs', {
 
 def download_csv_from_blockchain(address):
     """
-    this function downloads the csv file from the blockchain due to the auction address
+    this function downloads the csv file from the blockchain using  the auction address
     :param address: auction-address
     :return: none
     """
@@ -44,12 +44,12 @@ def download_csv_from_blockchain(address):
     browser.get(address_url)
     time.sleep(random.randint(1, 10))
 
-    # change the start date
-    js_script = """
-        var element = document.getElementById('{0}');
-        element.value = '{1}';
-    """.format('ContentPlaceHolder1_txtstart_time', '1/12/2023')
-    browser.execute_script(js_script)
+    # change the start date (only relevant if data goes further than a month back)
+    # js_script = """
+    #     var element = document.getElementById('{0}');
+    #     element.value = '{1}';
+    # """.format('ContentPlaceHolder1_txtstart_time', '1/12/2023')
+    # browser.execute_script(js_script)
     time.sleep(random.randint(1, 10))
 
     # Function to check if element exists by XPath
@@ -91,6 +91,7 @@ def download_csv_from_blockchain(address):
     #     # browser.quit()
 
 
+# only for data from qualtrics
 def load_df():
     sellers_data_1 = pd.read_csv('Data+Marketplace+stage+1+2+sellers.csv')
     column_list = sellers_data_1.columns.values
@@ -105,11 +106,12 @@ def load_df():
     return sellers_data_1
 
 
+# only for data from qualtrics
 def create_address_list(col_lst, a, df_combined):
     """
     this function creates a list of all the addresses that were used in the auctions
-    :param col_lst: a list of columns that we want to take this data 2101/address from
-    :param a: the number of auctions that we want to take the data 2101 from for each seller
+    :param col_lst: a list of columns that we want to take this data qualtrics/address from
+    :param a: the number of auctions that we want to take the data qualtrics from for each seller
     :param df_combined: the df we created from the two csv files
     :return: auction addresses list
     """
@@ -129,16 +131,20 @@ def create_address_list(col_lst, a, df_combined):
     return clean_address_list
 
 
+# only for data from qualtrics
 def create_addresses_list():
     df = load_df()
     return create_address_list(['verification_'], 3, df)
 
 
 # address_list = ['0xDFc97DF05F35315D6B84A49BB7FEF5d52c3c4850', '0xB3D54069f271919088158F9DE5E5f610C0D23C8B']
-address_list = create_addresses_list()
+# only for data from qualtrics
+# address_list = create_addresses_list()
 
 if __name__ == '__main__':
-    for address in address_list[21:]:
+    # CHANGE NAME HERE
+    df = pd.read_csv('blockchain 2201.csv')
+    for address in df['Address']:
         print("starting with " + address)
         browser = webdriver.Chrome(options=chrome_options)
         try:

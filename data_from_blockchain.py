@@ -4,7 +4,8 @@ import os
 from eth_utils import to_wei
 import matplotlib.pyplot as plt
 
-file_list = os.listdir("data 2101")
+# CHANGE NAME HERE - THIS IS THE FOLDER WHERE WE DOWNLOADED DATA FROM BLOCKCHAIN
+file_list = os.listdir("data 2201")
 
 
 def eth_to_wei(eth_val):
@@ -16,18 +17,25 @@ def eth_to_wei(eth_val):
 # creates column with wei value of transactions
 def create_df_and_csv_with_wei_val():
     for file in file_list:
-        df = pd.read_csv("data 2101/" + file, float_precision='round_trip')
+        # CHANGE NAME HERE
+        df = pd.read_csv("data 2201/" + file, float_precision='round_trip')
         for index, row in df.iterrows():
             if pd.isna(row['Status']):
                 eth_val = row['Value_IN(ETH)']
                 wei_val = eth_to_wei(eth_val)
                 df.at[index, 'val_in_wei'] = wei_val
-        df.to_csv("data 2101 in wei/" + file + ".csv")
+            else:
+                df = df.drop(index)
+        # CHANGE NAME HERE
+        df.to_csv("data in wei 2201/" + file)
         # print(df['Value_IN(ETH)'])
+
+# create_df_and_csv_with_wei_val()
 
 
 def create_dict_for_plot():
-    folder_path = 'data in wei 2101'
+    # CHANGE NAME HERE - TARGET FOLDER FOR CONVERTED WEI FILES
+    folder_path = 'data in wei 2201'
     data_dict = {}
 
     for filename in os.listdir(folder_path):
@@ -54,9 +62,14 @@ def adapt_dict(data_dict):
     new_dict = data_dict.copy()
     for key, val in new_dict.items():
         if len(val) > 1:
-            for i in range(len(val)-1, 0, -1):
-                val[i] = val[i] - val[i-1]
+            for i in range(len(val) - 1, 0, -1):
+                val[i] = val[i] - val[i - 1]
     return new_dict
+
+
+def generate_colour():
+    colour = np.random.rand(3, )
+    return colour
 
 
 def create_stacked_bar_plot(data_dict):
@@ -68,9 +81,6 @@ def create_stacked_bar_plot(data_dict):
     # Set up the figure and axes
     fig, ax = plt.subplots()
 
-    # Create a color map
-    cmap = plt.get_cmap('Set1')
-
     # Plot each column as a stacked bar
     for i, (key, lst) in enumerate(zip(keys, values)):
         # if key != '0x7664e53c74b3beced08710d2617761d6a09ea4af':
@@ -79,8 +89,8 @@ def create_stacked_bar_plot(data_dict):
             for value in lst:
                 if value != 0:  # Skip zero values
                     height = value
-                    color = cmap((bottom + height / 2) / sum(lst))  # Center the color on the bar
-                    ax.bar(key, height, bottom=bottom, color=color)
+                    colour = generate_colour()
+                    ax.bar(key, height, bottom=bottom, color=colour)
                     bottom += height
 
     # Set the y-axis limit based on the maximum value
@@ -95,10 +105,11 @@ def create_stacked_bar_plot(data_dict):
     # Display the plot
     plt.show()
 
+
 data_dict = create_dict_for_plot()
+
+# print(data_dict)
 
 # print(adapt_dict(data_dict))
 
-print(data_dict)
-
-# create_stacked_bar_plot(data_dict)
+create_stacked_bar_plot(data_dict)
