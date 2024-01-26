@@ -38,8 +38,8 @@ def create_merge_csv():
 # hobby_mean_df
 def calculate_col_mean(col_name_lst, df_combined):
     """
-    this function calculates the mean of the columns that we want to take the data from
-    :param col_name_lst: the list of columns that we want to take the data from and calculate the mean
+    this function calculates the mean of the columns that we want to take the data 2101 from
+    :param col_name_lst: the list of columns that we want to take the data 2101 from and calculate the mean
     :param df_combined: the df we created from the two csv files
     :return: dictionary of the columns and their mean
     """
@@ -68,8 +68,8 @@ def calculate_col_mean(col_name_lst, df_combined):
 def create_bid_dict(col_lst, a, df_combined):
     """
     this function creates a dictionary of the starting price and the wining bid for each auction
-    :param col_lst: the list of columns that we want to take the data from
-    :param a: number of auctions that we want to take the data from for each seller
+    :param col_lst: the list of columns that we want to take the data 2101 from
+    :param a: number of auctions that we want to take the data 2101 from for each seller
     :param df_combined: the df we created from the two csv files
     :return: a dictionary of the starting price and the wining bid for each auction
     """

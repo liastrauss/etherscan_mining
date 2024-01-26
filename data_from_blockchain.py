@@ -4,7 +4,7 @@ import os
 from eth_utils import to_wei
 import matplotlib.pyplot as plt
 
-file_list = os.listdir("data")
+file_list = os.listdir("data 2101")
 
 
 def eth_to_wei(eth_val):
@@ -16,18 +16,18 @@ def eth_to_wei(eth_val):
 # creates column with wei value of transactions
 def create_df_and_csv_with_wei_val():
     for file in file_list:
-        df = pd.read_csv("data/" + file, float_precision='round_trip')
+        df = pd.read_csv("data 2101/" + file, float_precision='round_trip')
         for index, row in df.iterrows():
             if pd.isna(row['Status']):
                 eth_val = row['Value_IN(ETH)']
                 wei_val = eth_to_wei(eth_val)
-                df.at[index, 'Value_IN(Wei)'] = wei_val
-        df.to_csv("data in wei/" + file + ".csv")
+                df.at[index, 'val_in_wei'] = wei_val
+        df.to_csv("data 2101 in wei/" + file + ".csv")
         # print(df['Value_IN(ETH)'])
 
 
 def create_dict_for_plot():
-    folder_path = 'data in wei'
+    folder_path = 'data in wei 2101'
     data_dict = {}
 
     for filename in os.listdir(folder_path):
@@ -35,9 +35,9 @@ def create_dict_for_plot():
             file_path = os.path.join(folder_path, filename)
             df = pd.read_csv(file_path)
 
-            if 'Value_IN(Wei)' in df.columns:
+            if 'val_in_wei' in df.columns:
                 to_column = df['To']
-                value_column = df['Value_IN(Wei)']
+                value_column = df['val_in_wei']
 
                 for to, value in zip(to_column, value_column):
                     if pd.notna(to):
@@ -95,10 +95,10 @@ def create_stacked_bar_plot(data_dict):
     # Display the plot
     plt.show()
 
-# data_dict = create_dict_for_plot()
+data_dict = create_dict_for_plot()
 
 # print(adapt_dict(data_dict))
 
-# print(data_dict)
+print(data_dict)
 
 # create_stacked_bar_plot(data_dict)

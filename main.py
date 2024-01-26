@@ -17,7 +17,7 @@ url = 'https://sepolia.etherscan.io/exportData?type=address&a='
 # if you download the file to a different directory, change the path here:
 download_directory = (r'C:\Users\User\Documents\עבודה רננה\Blockchain\ניתוח נתונים מכירה פומבית\data')
 
-# download_directory = (r'C:\Users\liast\Documents\RA Internship\Blockchain\data marketplace analysis\transactions by '
+# download_directory = (r'C:\Users\liast\Documents\RA Internship\Blockchain\data 2101 marketplace analysis\transactions by '
 #                       r'auction address')
 
 # Set up Chrome options and preferences for download
@@ -108,8 +108,8 @@ def load_df():
 def create_address_list(col_lst, a, df_combined):
     """
     this function creates a list of all the addresses that were used in the auctions
-    :param col_lst: a list of columns that we want to take this data/address from
-    :param a: the number of auctions that we want to take the data from for each seller
+    :param col_lst: a list of columns that we want to take this data 2101/address from
+    :param a: the number of auctions that we want to take the data 2101 from for each seller
     :param df_combined: the df we created from the two csv files
     :return: auction addresses list
     """
