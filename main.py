@@ -13,6 +13,8 @@ from statistics import mean
 import matplotlib.pyplot as plt
 
 url = 'https://sepolia.etherscan.io/exportData?type=address&a='
+
+# if you download the file to a different directory, change the path here:
 download_directory = (r'C:\Users\User\Documents\עבודה רננה\Blockchain\ניתוח נתונים מכירה פומבית\data')
 
 # download_directory = (r'C:\Users\liast\Documents\RA Internship\Blockchain\data marketplace analysis\transactions by '
@@ -31,7 +33,12 @@ chrome_options.add_experimental_option('prefs', {
 # browser = webdriver.Chrome(options=chrome_options)
 
 
-def login(address):
+def download_csv_from_blockchain(address):
+    """
+    this function downloads the csv file from the blockchain due to the auction address
+    :param address: auction-address
+    :return: none
+    """
     # open the site
     address_url = url + address
     browser.get(address_url)
@@ -56,10 +63,10 @@ def login(address):
     # Ticks reCAPTCHA checkbox
     if not check_exists_by_xpath('/html/body/div[2]/div[3]/div[1]/div/div/span/div[4]'):
         element = browser.find_element(By.TAG_NAME, 'iframe')
-        print("scrolling down")
+        # print("scrolling down")
         browser.execute_script("arguments[0].scrollIntoView();", element)
         time.sleep(1)
-        print("scrollllllllll")
+        # print("scrollllllllll")
         browser.find_element(By.TAG_NAME, 'iframe').click()
     time.sleep(30)
 
@@ -99,6 +106,13 @@ def load_df():
 
 
 def create_address_list(col_lst, a, df_combined):
+    """
+    this function creates a list of all the addresses that were used in the auctions
+    :param col_lst: a list of columns that we want to take this data/address from
+    :param a: the number of auctions that we want to take the data from for each seller
+    :param df_combined: the df we created from the two csv files
+    :return: auction addresses list
+    """
     address_lst = []
     clean_address_list = []
     for i in range(a):
@@ -128,13 +142,14 @@ if __name__ == '__main__':
         print("starting with " + address)
         browser = webdriver.Chrome(options=chrome_options)
         try:
-            login(address)
+            # trying to download the csv file from the blockchain
+            download_csv_from_blockchain(address)
         except:
             print("exception!")
             browser.quit()
             browser = webdriver.Chrome(options=chrome_options)
             print("continue with " + address)
-            login(address)
+            download_csv_from_blockchain(address)
         finally:
             print("finished with " + address)
             browser.quit()

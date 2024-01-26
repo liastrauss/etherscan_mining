@@ -6,6 +6,10 @@ import matplotlib.pyplot as plt
 
 
 def create_merge_csv():
+    """
+    this function merges the 2 csv files of the sellers
+    :return: merged df
+    """
     sellers_data_1 = pd.read_csv('Data+Marketplace+stage+1+2+sellers.csv')
     sellers_data_3 = pd.read_csv('Data+marketplace+seller+stage+3.csv')
     column_list = sellers_data_1.columns.values
@@ -33,6 +37,12 @@ def create_merge_csv():
 # hobby_mean_df = pd.to_numeric(df_combined['verification_1_2'], errors='coerce')
 # hobby_mean_df
 def calculate_col_mean(col_name_lst, df_combined):
+    """
+    this function calculates the mean of the columns that we want to take the data from
+    :param col_name_lst: the list of columns that we want to take the data from and calculate the mean
+    :param df_combined: the df we created from the two csv files
+    :return: dictionary of the columns and their mean
+    """
     mean_dict = {}
     for col in col_name_lst:
         mean_df = df_combined[col]
@@ -56,6 +66,13 @@ def calculate_col_mean(col_name_lst, df_combined):
 
 
 def create_bid_dict(col_lst, a, df_combined):
+    """
+    this function creates a dictionary of the starting price and the wining bid for each auction
+    :param col_lst: the list of columns that we want to take the data from
+    :param a: number of auctions that we want to take the data from for each seller
+    :param df_combined: the df we created from the two csv files
+    :return: a dictionary of the starting price and the wining bid for each auction
+    """
     bids_dict = {}
     for i in range(a):
         for index in df_combined.index:
@@ -80,6 +97,11 @@ def create_bid_dict(col_lst, a, df_combined):
 
 
 def create_bid_df(bids_dict):
+    """
+    this function creates a df from the dictionary of the starting price and the wining bid for each auction
+    :param bids_dict: the dictionary of the starting price and the wining bid for each auction
+    :return: df of the starting price and the wining bid for each auction
+    """
     new_dict = {"address": [], "start": [], "end": []}
     for key in bids_dict:
         for index in bids_dict[key]:
@@ -97,6 +119,11 @@ def create_bid_df(bids_dict):
 
 
 def profit_mean(bids_dict):
+    """
+    this function calculates the mean of the profit for each auction
+    :param bids_dict:
+    :return: a list of the mean of the profit for each auction
+    """
     mean_list = []
     for key in bids_dict:
         num_list = []
