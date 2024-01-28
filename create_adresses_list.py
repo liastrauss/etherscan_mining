@@ -37,11 +37,12 @@ def load_df():
 
 def create_bid_dict(col_lst, a, df_combined):
     """
-    this function
-    :param col_lst:
-    :param a:
-    :param df_combined:
-    :return:
+    this function creates a dictionary of all auctions: address, start price, end price. it takes the data from the
+    qualtrics df.
+    :param col_lst: the columns name that we took the data from
+    :param a: number of auctions for each seller
+    :param df_combined: the df we created from the two csv files
+    :return: dictionary of all auctions: address, start price, end price
     """
     bids_dict = {}
     for i in range(a):
@@ -67,6 +68,13 @@ def create_bid_dict(col_lst, a, df_combined):
 
 
 def create_address_list(col_lst, a, df_combined):
+    """
+    creates a list of all the addresses that were used in the auctions
+    :param col_lst: the columns name that we took the data from
+    :param a: number of auctions for each seller
+    :param df_combined: the df we created from the two csv files
+    :return: a list of all the addresses that were used in the auctions
+    """
     address_list = []
     clean_address_list = []
     for i in range(a):
@@ -97,6 +105,11 @@ def create_address_list(col_lst, a, df_combined):
 
 
 def create_bid_df(bids_dict):
+    """
+    this function creates a df from the dictionary of the starting price and the wining bid for each auction
+    :param bids_dict: a dictionary of all auctions: address, start price, end price
+    :return: df of the starting price and the wining bid for each auction
+    """
     new_dict = {"address": [], "start": [], "end": []}
     for key in bids_dict:
         for index in bids_dict[key]:
@@ -114,6 +127,11 @@ def create_bid_df(bids_dict):
 
 
 def profit_mean(bids_dict):
+    """
+    this function calculates the profit for each auction
+    :param bids_dict: a dictionary of all auctions: address, start price, end price
+    :return: a list of the profit for each auction
+    """
     mean_list = []
     for key in bids_dict:
         num_list = []
@@ -126,6 +144,11 @@ def profit_mean(bids_dict):
 
 
 def calc_ratio(bids_dict):
+    """
+    this function calculates the ratio between the start price and the end price for each auction
+    :param bids_dict: a dictionary of all auctions: address, start price, end price
+    :return: a list of the ratio between the start price and the end price for each auction
+    """
     ratio_list = []
     for key in bids_dict:
         num_list = []
@@ -140,6 +163,11 @@ def calc_ratio(bids_dict):
 
 
 def create_addresses_list():
+    """
+    ONLY RELEVANT FOR DATA FROM QUALTRICS
+    this function creates a list of all the addresses that were used in the auctions
+    :return: auction addresses list
+    """
     df = load_df()
     # bids_dictionary = create_bid_dict(['verification_', 'bids information_'], 3)
     # profit_mean(bids_dict)

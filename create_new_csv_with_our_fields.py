@@ -136,6 +136,11 @@ def profit_mean(bids_dict):
 
 
 def calc_ratio(bids_dict):
+    """
+    this function calculates the ratio of the wining bid to the starting price for each auction
+    :param bids_dict: a dictionary of the starting price and the wining bid for each auction
+    :return: a list of the ratio of the wining bid to the starting price for each auction
+    """
     ratio_list = []
     for key in bids_dict:
         num_list = []
@@ -157,6 +162,11 @@ def calc_ratio(bids_dict):
 
 
 def create_double_graph(bids_df):
+    """
+    this function creates a double graph of the starting price and the wining bid for each auction
+    :param bids_df: df of the starting price and the wining bid for each auction
+    :return: none
+    """
     bids_df.plot(x="address", y=["start", "end"], kind="bar")
     plt.show()
     return 0
