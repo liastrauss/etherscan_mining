@@ -14,19 +14,17 @@ import matplotlib.pyplot as plt
 
 url = 'https://sepolia.etherscan.io/exportData?type=address&a='
 
-# if you download the file to a different directory, change the path here:
+########################################
+# CHANGE NAME HERE - LOCAL DOWNLOAD DIRECTORY FOR FILES
+########################################
 download_directory = (r'C:\Users\liast\PycharmProjects\pythonProject1\data 2201')
-
-# download_directory = (r'C:\Users\liast\Documents\RA Internship\Blockchain\data qualtrics marketplace analysis\transactions by '
-#                       r'auction address')
 
 # Set up Chrome options and preferences for download
 chrome_options = Options()
 chrome_options.add_experimental_option('prefs', {
     'download.default_directory': download_directory,
     'download.prompt_for_download': False,
-    'download.directory_upgrade': True,
-    # 'safebrowsing.enabled': True
+    'download.directory_upgrade': True
 })
 
 
@@ -35,7 +33,7 @@ chrome_options.add_experimental_option('prefs', {
 
 def download_csv_from_blockchain(address):
     """
-    this function downloads the csv file from the blockchain using  the auction address
+    this function downloads the csv file from the blockchain using the auction address
     :param address: auction-address
     :return: none
     """
@@ -44,16 +42,23 @@ def download_csv_from_blockchain(address):
     browser.get(address_url)
     time.sleep(random.randint(1, 10))
 
-    # change the start date (only relevant if data goes further than a month back)
-    # js_script = """
-    #     var element = document.getElementById('{0}');
-    #     element.value = '{1}';
-    # """.format('ContentPlaceHolder1_txtstart_time', '1/12/2023')
-    # browser.execute_script(js_script)
+    ###################################
+    # CHANGE THE START DATE (ONLY RELEVANT IF DATA GOES FURTHER THAN A MONTH BACK)
+    ###################################
+    js_script = """
+        var element = document.getElementById('{0}');
+        element.value = '{1}';
+    """.format('ContentPlaceHolder1_txtstart_time', '1/01/2023')
+    browser.execute_script(js_script)
     time.sleep(random.randint(1, 10))
 
     # Function to check if element exists by XPath
     def check_exists_by_xpath(xpath):
+        """
+        this function checks if an element exists by xpath
+        :param xpath: xpath
+        :return: boolean
+        """
         try:
             browser.find_element(By.XPATH, xpath)
         except NoSuchElementException:
@@ -80,19 +85,17 @@ def download_csv_from_blockchain(address):
         while_num += 1
         print("while num is: ", while_num)
     print("end of while loop")
-    # browser.quit()
-    # r"0x\w+"
-    # while_num = 0
-    #     while not any(fname.startswith(address) for fname in os.listdir(download_directory)):
-    #         time.sleep(1)
-    #         while_num += 1
-    #         print("while num is: ", while_num)
-    #     print("end of while loop")
-    #     # browser.quit()
 
 
-# only for data from qualtrics
+##################################
+# THIS FUNCTION IS ONLY RELEVANT FOR DATA FROM QUALTRICS
+##################################
 def load_df():
+    """
+    ONLY RELEVANT FOR DATA FROM QUALTRICS
+    this function loads the df from the csv files
+    :return: data fram
+    """
     sellers_data_1 = pd.read_csv('Data+Marketplace+stage+1+2+sellers.csv')
     column_list = sellers_data_1.columns.values
     # print(column_list)
@@ -106,9 +109,12 @@ def load_df():
     return sellers_data_1
 
 
-# only for data from qualtrics
+##################################
+# THIS FUNCTION IS ONLY RELEVANT FOR DATA FROM QUALTRICS
+##################################
 def create_address_list(col_lst, a, df_combined):
     """
+    ONLY RELEVANT FOR DATA FROM QUALTRICS
     this function creates a list of all the addresses that were used in the auctions
     :param col_lst: a list of columns that we want to take this data qualtrics/address from
     :param a: the number of auctions that we want to take the data qualtrics from for each seller
@@ -131,18 +137,26 @@ def create_address_list(col_lst, a, df_combined):
     return clean_address_list
 
 
-# only for data from qualtrics
+##################################
+# THIS FUNCTION IS ONLY RELEVANT FOR DATA FROM QUALTRICS
+##################################
 def create_addresses_list():
+    """
+    ONLY RELEVANT FOR DATA FROM QUALTRICS
+    this function creates a list of all the addresses that were used in the auctions
+    :return: auction addresses list
+    """
     df = load_df()
     return create_address_list(['verification_'], 3, df)
 
 
-# address_list = ['0xDFc97DF05F35315D6B84A49BB7FEF5d52c3c4850', '0xB3D54069f271919088158F9DE5E5f610C0D23C8B']
-# only for data from qualtrics
-# address_list = create_addresses_list()
-
 if __name__ == '__main__':
+    """
+    this is the main function crawls the blockchain and downloads the csv files
+    """
+    ##################################
     # CHANGE NAME HERE
+    ##################################
     df = pd.read_csv('blockchain 2201.csv')
     for address in df['Address']:
         print("starting with " + address)

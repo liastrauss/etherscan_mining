@@ -4,11 +4,18 @@ import os
 from eth_utils import to_wei
 import matplotlib.pyplot as plt
 
+######################################
 # CHANGE NAME HERE - THIS IS THE FOLDER WHERE WE DOWNLOADED DATA FROM BLOCKCHAIN
+####################################
 file_list = os.listdir("data 2201")
 
 
 def eth_to_wei(eth_val):
+    """
+    this function will convert value in ether into value in wei
+    :param eth_val: value in eth (float)
+    :return: the value in wei (float)
+    """
     wei_val = to_wei(eth_val, 'ether')
     # print(f"ETH: {eth_val}, Wei: {wei_val}")
     return wei_val
@@ -16,8 +23,14 @@ def eth_to_wei(eth_val):
 
 # creates column with wei value of transactions
 def create_df_and_csv_with_wei_val():
+    """
+    this function creates a new column in the df with the wei value of the transaction
+    :return: none
+    """
     for file in file_list:
+        ############################
         # CHANGE NAME HERE
+        ############################
         df = pd.read_csv("data 2201/" + file, float_precision='round_trip')
         for index, row in df.iterrows():
             if pd.isna(row['Status']):
@@ -34,7 +47,14 @@ def create_df_and_csv_with_wei_val():
 
 
 def create_dict_for_plot():
+    """
+    this function create a dict of all bids of a specific auction.
+    :return: a dictionary of all the auctions and bids.
+    """
+    create_df_and_csv_with_wei_val()
+    ####################################
     # CHANGE NAME HERE - TARGET FOLDER FOR CONVERTED WEI FILES
+    ####################################
     folder_path = 'data in wei 2201'
     data_dict = {}
 
@@ -59,6 +79,11 @@ def create_dict_for_plot():
 
 
 def adapt_dict(data_dict):
+    """
+    this function adapts the dictionary to be able to plot it as a stacked bar plot
+    :param data_dict: dictionary of all the auctions and bids
+    :return: dictionary of all the auctions and bids adapted for stacked bar plot
+    """
     new_dict = data_dict.copy()
     for key, val in new_dict.items():
         if len(val) > 1:
@@ -68,11 +93,20 @@ def adapt_dict(data_dict):
 
 
 def generate_colour():
+    """
+    this function generates a random colour
+    :return: a random colour
+    """
     colour = np.random.rand(3, )
     return colour
 
 
 def create_stacked_bar_plot(data_dict):
+    """
+    this function creates a stacked bar plot of all the auctions and bids
+    :param data_dict: dictionary of all the auctions and bids
+    :return: shows the plot
+    """
     new_dict = adapt_dict(data_dict)
     # Extract keys and values from the dictionary
     keys = list(new_dict.keys())
@@ -83,15 +117,13 @@ def create_stacked_bar_plot(data_dict):
 
     # Plot each column as a stacked bar
     for i, (key, lst) in enumerate(zip(keys, values)):
-        # if key != '0x7664e53c74b3beced08710d2617761d6a09ea4af':
-        if True:
-            bottom = 0
-            for value in lst:
-                if value != 0:  # Skip zero values
-                    height = value
-                    colour = generate_colour()
-                    ax.bar(key, height, bottom=bottom, color=colour)
-                    bottom += height
+        bottom = 0
+        for value in lst:
+            if value != 0:  # Skip zero values
+                height = value
+                colour = generate_colour()
+                ax.bar(key, height, bottom=bottom, color=colour)
+                bottom += height
 
     # Set the y-axis limit based on the maximum value
     ax.set_ylim(0, 1000)
@@ -106,10 +138,10 @@ def create_stacked_bar_plot(data_dict):
     plt.show()
 
 
-data_dict = create_dict_for_plot()
+# data_dict = create_dict_for_plot()
 
 # print(data_dict)
 
 # print(adapt_dict(data_dict))
 
-create_stacked_bar_plot(data_dict)
+# create_stacked_bar_plot(data_dict)

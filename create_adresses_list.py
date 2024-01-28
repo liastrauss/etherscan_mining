@@ -5,7 +5,16 @@ from statistics import mean
 import matplotlib.pyplot as plt
 
 
+########################################################
+# THIS FILE IS RELEVANT ONLY FOR DATA FROM QUALTRICS!
+########################################################
+
 def load_df():
+    """
+    ONLY RELEVANT FOR DATA FROM QUALTRICS
+    this function loads the df from the csv files
+    :return: data frame
+    """
     sellers_data_1 = pd.read_csv('Data+Marketplace+stage+1+2+sellers.csv')
     # sellers_data_3 = pd.read_csv('/content/Data+marketplace+seller+stage+3.csv')
     column_list = sellers_data_1.columns.values
@@ -27,6 +36,13 @@ def load_df():
 
 
 def create_bid_dict(col_lst, a, df_combined):
+    """
+    this function
+    :param col_lst:
+    :param a:
+    :param df_combined:
+    :return:
+    """
     bids_dict = {}
     for i in range(a):
         for index in df_combined.index:
